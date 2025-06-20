@@ -40,3 +40,18 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+
+# Angular Universal SSR
+server/
+
+# Ignore database dumps
+*.sql
+*.sqlite

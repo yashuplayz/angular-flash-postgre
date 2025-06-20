@@ -1,0 +1,53 @@
+body, :host {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #005aa7, #fffde4);
+}
+
+.login-container {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-container img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.form-control:focus {
+    border-color: #005aa7;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #005aa7;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:active, .btn-primary:focus {
+    background-color: #004080;
+}
+
+.text-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.text-link a {
+    text-decoration: none;
+    color: #005aa7;
+}

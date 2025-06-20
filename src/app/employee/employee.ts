@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Employee {
   id?: number;
@@ -25,15 +26,23 @@ export class EmployeeComponent implements OnInit {
   submitting = false;
   deletingId: number | undefined;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
+    console.log('ngOnInit called');
     this.fetchEmployees();
   }
 
   fetchEmployees() {
-    this.http.get<Employee[]>(this.API_URL).subscribe(data => {
-      this.employees = data;
+      console.log('Fetching employees...');
+    this.http.get<Employee[]>(this.API_URL).subscribe({
+      next: (data) => {
+        console.log('Employees fetched:', data);
+        this.employees = data;
+      },
+      error: (err) => {
+        console.error('Error fetching employees:', err);
+      }
     });
   }
 
@@ -56,11 +65,15 @@ export class EmployeeComponent implements OnInit {
       };
       this.http.put(`${this.API_URL}/${this.editingId}`, payload).subscribe({
         next: () => {
+          console.log('Employee updated');
           this.resetForm();
           window.location.reload();
           this.submitting = false;
         },
-        error: () => { this.submitting = false; }
+        error: (err) => {
+          console.error('Error updating employee:', err);
+          this.submitting = false;
+        }
       });
     } else {
       // Add
@@ -71,11 +84,15 @@ export class EmployeeComponent implements OnInit {
       };
       this.http.post(this.API_URL, payload).subscribe({
         next: () => {
+          console.log('Employee added');
           this.resetForm();
-          window.location.reload();
+          // window.location.reload();
           this.submitting = false;
         },
-        error: () => { this.submitting = false; }
+        error: (err) => {
+          console.error('Error adding employee:', err);
+          this.submitting = false;
+        }
       });
     }
   }
@@ -97,10 +114,14 @@ export class EmployeeComponent implements OnInit {
       this.deletingId = id;
       this.http.delete(`${this.API_URL}/${id}`).subscribe({
         next: () => {
+          console.log('Employee deleted');
           window.location.reload();
           this.deletingId = undefined;
         },
-        error: () => { this.deletingId = undefined; }
+        error: (err) => {
+          console.error('Error deleting employee:', err);
+          this.deletingId = undefined;
+        }
       });
     }
   }
@@ -109,5 +130,10 @@ export class EmployeeComponent implements OnInit {
     this.editingId = null;
     this.employeeModel = { id: undefined, name: '', email: '', designation: '' };
     this.submitting = false;
+  }
+
+  logout() {
+    localStorage.removeItem('isLoggedIn');
+    this.router.navigate(['/login']);
   }
 }
